@@ -1,0 +1,17 @@
+-- Stored procedure for GetSortedBooks
+CREATE PROCEDURE GetSortedBooks
+AS
+BEGIN
+    SELECT * FROM Books
+    ORDER BY Publisher, AuthorLastName, AuthorFirstName, Title
+END
+
+
+-- Stored procedure for GetBooksSortedByAuthor
+CREATE PROCEDURE GetBooksSortedByAuthor
+AS
+BEGIN
+    SELECT * FROM Books
+    ORDER BY AuthorLastName, AuthorFirstName, Title
+END
+
