@@ -1,0 +1,194 @@
+﻿@model IEnumerable<Rest_API_MVC.Models.Book>
+
+@{
+    ViewData["Title"] = "Index";    
+    var totalPrice = ViewBag.TotalPrice;
+}
+
+<h1>Books</h1>
+
+<!-- Table for Books Sorted by Publisher, Author (last, first) then Title -->
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Publisher
+            </th>
+            <th>
+                Author Last Name
+            </th>
+            <th>
+                Author First Name
+            </th>
+            <th>
+                Title
+            </th>
+           
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Publisher)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AuthorLastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AuthorFirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+              
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Table for Books Sorted by Author (last, first) then Title -->
+<table class="table" id="sortedByAuthorTable">
+    <thead>
+        <tr>
+            <th>
+                Author Last Name
+            </th>
+            <th>
+                Author First Name
+            </th>
+            <th>
+                Title
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+       
+    </tbody>
+</table>
+
+
+<!-- Table for Books Sorted by Publisher, Author (last, first) then Title using SP-->
+
+<table class="table" id="sortedBooksSpTable">
+    <thead>
+        <tr>
+            <th>
+                Publisher
+            </th>
+            <th>
+                Author Last Name
+            </th>
+            <th>
+                Author First Name
+            </th>
+            <th>
+                Title
+            </th>
+          
+        </tr>
+    </thead>
+    <tbody>
+       
+    </tbody>
+</table>
+
+
+<!-- Table for Books Sorted by Author (last, first) then Title using SP-->
+
+<table class="table" id="sortedByAuthorSpTable">
+    <thead>
+        <tr>
+            <th>
+                Author Last Name
+            </th>
+            <th>
+                Author First Name
+            </th>
+            <th>
+                Title
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+       
+    </tbody>
+</table>
+
+<div>
+    <label><strong>Total Price:</strong></label>
+    <span>@totalPrice</span>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+       
+        //ajax call for sorted-by-author
+        $.ajax({
+            url: 'sorted-by-author',
+            type: 'GET',
+            success: function (data) {
+                var tableBody = $('#sortedByAuthorTable tbody');
+                tableBody.empty(); 
+
+                data.forEach(function (book) {
+                    tableBody.append('<tr>' +
+                        '<td>' + book.authorLastName + '</td>' +
+                        '<td>' + book.authorFirstName + '</td>' +
+                        '<td>' + book.title + '</td>' +
+                        '</tr>');
+                });
+            },
+            error: function (xhr, status, error) {
+                console.log('AJAX Error:', error);
+            }
+        });
+
+        //ajax call for sortedbooks-sp
+        $.ajax({
+            url: 'sortedbooks-sp',
+            type: 'GET',
+            success: function (data) {
+                var tableBody = $('#sortedBooksSpTable tbody');
+                tableBody.empty(); // Clear existing rows
+
+                data.forEach(function (book) {
+                    tableBody.append('<tr>' +
+                        '<td>' + book.publisher + '</td>' +
+                        '<td>' + book.authorLastName + '</td>' +
+                        '<td>' + book.authorFirstName + '</td>' +
+                        '<td>' + book.title + '</td>' +
+                        '</tr>');
+                });
+            },
+            error: function (xhr, status, error) {
+                console.log('AJAX Error:', error);
+            }
+        });
+
+        //ajax call for sorted-by-author-sp
+        $.ajax({
+            url: 'sorted-by-author-sp',
+            type: 'GET',
+            success: function (data) {
+                var tableBody = $('#sortedByAuthorSpTable tbody');
+                tableBody.empty(); // Clear existing rows
+
+                data.forEach(function (book) {
+                    tableBody.append('<tr>' +                       
+                        '<td>' + book.authorLastName + '</td>' +
+                        '<td>' + book.authorFirstName + '</td>' +
+                        '<td>' + book.title + '</td>' +
+                        '</tr>');
+                });
+            },
+            error: function (xhr, status, error) {
+                console.log('AJAX Error:', error);
+            }
+        });
+    });
+
+</script>
